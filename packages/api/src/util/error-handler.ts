@@ -13,3 +13,6 @@ export const trpcWithErrorHandling = async <T>(
     });
   }
 };
+export function isTRPCClientError(e: unknown) {
+  return e instanceof TRPCError;
+}
