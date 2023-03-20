@@ -1,8 +1,7 @@
-import { useSignUp, useSignIn } from "@clerk/clerk-expo";
 import React from "react";
 import { Button, View } from "react-native";
-
 import * as AuthSession from "expo-auth-session";
+import { useSignIn, useSignUp } from "@clerk/clerk-expo";
 
 const SignInWithOAuth = () => {
   const { isLoaded, signIn, setSession } = useSignIn();

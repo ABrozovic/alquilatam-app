@@ -10,7 +10,7 @@
     "lint:fix": "pnpm lint --fix",
     "type-check": "tsc --noEmit"
   },
-  "dependencies": {    
+  "dependencies": {
     "@acme/db": "*",
     "@trpc/client": "^10.14.0",
     "@trpc/server": "^10.14.0",
