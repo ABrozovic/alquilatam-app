@@ -29,7 +29,11 @@ interface UserInterface extends Omit<User, UnwantedKeys> {
     id: string;
   }[];
 }
-
+export const config = {
+  api: {
+    bodyParser: false,
+  },
+};
 const webhookSecret: string = env.SVIX_SECRET_KEY;
 
 export default async function handler(
