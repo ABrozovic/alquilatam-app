@@ -2,64 +2,105 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-    provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["fullTextSearch", "extendedWhereUnique"]
 }
 
 datasource db {
-    provider = "sqlite"
-    url      = env("DATABASE_URL")
-}
-
-model Post {
-    id      String @id @default(cuid())
-    title   String
-    content String
-}
-
-// NextAuth.js Models
-// NOTE: When using postgresql, mysql or sqlserver, 
-// uncomment the @db.Text annotations below
-// @see https://next-auth.js.org/schemas/models
-model Account {
-    id                String  @id @default(cuid())
-    userId            String
-    type              String
-    provider          String
-    providerAccountId String
-    refresh_token     String? // @db.Text
-    access_token      String? // @db.Text
-    expires_at        Int?
-    token_type        String?
-    scope             String?
-    id_token          String? // @db.Text
-    session_state     String?
-    user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-    @@unique([provider, providerAccountId])
-}
-
-model Session {
-    id           String   @id @default(cuid())
-    sessionToken String   @unique
-    userId       String
-    expires      DateTime
-    user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  provider     = "mysql"
+  url          = env("DATABASE_URL")
+  relationMode = "prisma"
 }
 
 model User {
-    id            String    @id @default(cuid())
-    name          String?
-    email         String?   @unique
-    emailVerified DateTime?
-    image         String?
-    accounts      Account[]
-    sessions      Session[]
+  id              String            @id @default(cuid())
+  userId          String            @unique
+  name            String            
+  email           String            
+  role            String?
+  Product         Product[]
+  UserProductView UserProductView[]
+
+  @@index([userId])
 }
 
-model VerificationToken {
-    identifier String
-    token      String   @unique
-    expires    DateTime
+// Category Schena
+model Category {
+  id           String                 @id @default(cuid())
+  name         String                 @unique
+  slug         String                 @unique
+  isActive     Boolean                @default(true)
+  autocomplete CategoryAutoComplete[]
+  products     Product[]
+  image        CategoryImage?
+}
 
-    @@unique([identifier, token])
+model CategoryAutoComplete {
+  id         String    @id @default(cuid())
+  name       String    @db.Text
+  Category   Category? @relation(fields: [categoryId], references: [id])
+  categoryId String?
+
+  @@index([categoryId])
+}
+
+model CategoryImage {
+  id         String   @id @default(cuid())
+  publicId   String   @db.Text
+  image      String   @db.Text
+  blur       String?  @db.Text
+  size       Int
+  category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  categoryId String   @unique
+}
+
+// Product Schema
+model Product {
+  id            String            @id @default(cuid())
+  name          String            @db.Text
+  type          String            @db.Text
+  brand         String            @db.Text
+  description   String?           @db.Text
+  price         Float
+  priceType     String            @db.Text
+  timeRange     Int
+  timeRangeType String            @db.Text
+  city          String            @db.Text
+  category      Category          @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  categoryId    String
+  images        ProductImage[]
+  views         UserProductView[]
+  user          User?             @relation(fields: [userId], references: [id])
+  userId        String?
+  isFeatured    Boolean           @default(false)
+  isActive      Boolean           @default(true)
+  createdAt     DateTime          @default(now())
+  updatedAt     DateTime          @updatedAt
+
+  @@index([userId])
+  @@index([categoryId])
+}
+
+model ProductImage {
+  id        String  @id @default(cuid())
+  publicId  String  @db.Text
+  image     String  @db.Text
+  blur      String? @db.Text
+  size      Int
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  productId String
+
+  @@index([productId])
+}
+
+model UserProductView {
+  id        String   @id @default(cuid())
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  productId String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([productId])
 }
