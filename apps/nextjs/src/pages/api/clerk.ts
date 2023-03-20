@@ -6,7 +6,6 @@ import { Webhook, type WebhookRequiredHeaders } from "svix";
 import { prisma } from "@acme/db";
 
 import { env } from "~/env.mjs";
-import { buffer } from "stream/consumers";
 
 type UnwantedKeys =
   | "emailAddresses"
@@ -41,7 +40,7 @@ export default async function handler(
   req: NextApiRequestWithSvixRequiredHeaders,
   res: NextApiResponse,
 ) {
-  const payload = (await buffer(req)).toString();
+  const payload = JSON.stringify(req.body);
   const headers = req.headers;
   const wh = new Webhook(webhookSecret);
   let evt: Event | null = null;
