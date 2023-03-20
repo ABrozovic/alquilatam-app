@@ -1,6 +1,7 @@
 import type { IncomingHttpHeaders } from "http";
 import type { NextApiRequest, NextApiResponse } from "next";
 import type { User } from "@clerk/nextjs/dist/api";
+import { buffer } from "micro";
 import { Webhook, type WebhookRequiredHeaders } from "svix";
 
 import { prisma } from "@acme/db";
@@ -29,18 +30,15 @@ interface UserInterface extends Omit<User, UnwantedKeys> {
     id: string;
   }[];
 }
-export const config = {
-  api: {
-    bodyParser: false,
-  },
-};
+
 const webhookSecret: string = env.SVIX_SECRET_KEY;
 
 export default async function handler(
   req: NextApiRequestWithSvixRequiredHeaders,
   res: NextApiResponse,
 ) {
-  const payload = JSON.stringify(req.body);
+  console.log("payload", req);
+  const payload = (await buffer(req)).toString();
   const headers = req.headers;
   const wh = new Webhook(webhookSecret);
   let evt: Event | null = null;
@@ -91,3 +89,9 @@ type Event = {
 };
 
 type EventType = "user.created" | "user.updated" | "*";
+
+export const config = {
+  api: {
+    bodyParser: false,
+  },
+};
