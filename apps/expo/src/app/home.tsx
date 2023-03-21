@@ -18,14 +18,14 @@ const SignOut = () => {
   );
 };
 
-const Index = () => {
+const HomeScreen = () => {
   return (
-    <SafeAreaView className="bg-[#1F104A]">
+    <SafeAreaView className="bg-[#383249]">
       {/* Changes page title visible on the header */}
       <Stack.Screen options={{ title: "Home Page" }} />
       <View className="h-full w-full p-4">
         <Text className="mx-auto pb-2 text-5xl font-bold text-white">
-          Create <Text className="text-pink-400">T3</Text> Turbo
+          Create <Text className="text-pink-400">T3</Text> Turbos
         </Text>
 
         <View className="py-2">
@@ -38,4 +38,4 @@ const Index = () => {
   );
 };
 
-export default Index;
+export default HomeScreen;
