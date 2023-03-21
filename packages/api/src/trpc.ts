@@ -41,7 +41,7 @@ type CreateContextOptions = {
  * - trpc's `createSSGHelpers` where we don't have req/res
  * @see https://create.t3.gg/en/usage/trpc#-servertrpccontextts
  */
-const createInnerTRPCContext =  ({ auth }: CreateContextOptions) => {
+const createInnerTRPCContext = ({ auth }: CreateContextOptions) => {
   return {
     auth,
     prisma,
@@ -52,8 +52,8 @@ const createInnerTRPCContext =  ({ auth }: CreateContextOptions) => {
  * This is the actual context you'll use in your router
  * @link https://trpc.io/docs/context
  **/
-export const createTRPCContext =  (opts: CreateNextContextOptions) => {
-  return  createInnerTRPCContext({ auth: getAuth(opts.req) });
+export const createTRPCContext = (opts: CreateNextContextOptions) => {
+  return createInnerTRPCContext({ auth: getAuth(opts.req) });
 };
 
 export type Context = inferAsyncReturnType<typeof createTRPCContext>;

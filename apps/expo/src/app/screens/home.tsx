@@ -5,7 +5,7 @@ import { Stack, useRouter } from "expo-router";
 import { useAuth } from "@clerk/clerk-expo";
 import { FlashList } from "@shopify/flash-list";
 
-import { api, type RouterOutputs } from "../utils/api";
+import { api, type RouterOutputs } from "../../utils/api";
 
 const SignOut = () => {
   const { signOut } = useAuth();
@@ -99,7 +99,7 @@ const CreatePost: React.FC = () => {
   );
 };
 
-const Index = () => {
+const HomeScreen = () => {
   const postQuery = api.post.all.useQuery();
 
   const deletePostMutation = api.post.delete.useMutation({
@@ -146,4 +146,4 @@ const Index = () => {
   );
 };
 
-export default Index;
+export default HomeScreen;
