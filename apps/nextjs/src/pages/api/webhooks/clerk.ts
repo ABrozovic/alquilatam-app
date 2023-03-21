@@ -1,7 +1,6 @@
 import type { IncomingHttpHeaders } from "http";
 import type { NextApiRequest, NextApiResponse } from "next";
 import type { User } from "@clerk/nextjs/dist/api";
-import { buffer } from "micro";
 import { Webhook, type WebhookRequiredHeaders } from "svix";
 
 import { prisma } from "@acme/db";
@@ -31,14 +30,13 @@ interface UserInterface extends Omit<User, UnwantedKeys> {
   }[];
 }
 
-const webhookSecret: string = env.SVIX_SECRET_KEY;
+const webhookSecret: string = env.WEBHOOK_SECRET_KEY;
 
 export default async function handler(
   req: NextApiRequestWithSvixRequiredHeaders,
   res: NextApiResponse,
 ) {
-  console.log("payload", req);
-  const payload = (await buffer(req)).toString();
+  const payload = JSON.stringify(req.body);
   const headers = req.headers;
   const wh = new Webhook(webhookSecret);
   let evt: Event | null = null;
@@ -47,7 +45,6 @@ export default async function handler(
   } catch (_) {
     return res.status(400).json({});
   }
-  console.log("🚀 ~ file: clerk.ts:43 ~ evt.data:", evt.data);
 
   const { id } = evt.data;
 
@@ -74,7 +71,6 @@ export default async function handler(
       },
     });
   }
-  console.log(`User ${id} was ${eventType}`);
   res.status(201).json({});
 }
 
@@ -92,6 +88,6 @@ type EventType = "user.created" | "user.updated" | "*";
 
 export const config = {
   api: {
-    bodyParser: false,
+    bodyParser: true,
   },
 };
