@@ -2,7 +2,7 @@ const { fontFamily } = require("tailwindcss/defaultTheme");
 
 const config = {
   darkMode: ["class"],
-  content: ["./src/pages**/*.{ts,tsx}", "./src/components**/*.{ts,tsx}"],
+  content: ["./src/pages/**/*.{ts,tsx}", "./src/components/**/*.{ts,tsx}"],
   theme: {
     container: {
       center: true,
@@ -34,7 +34,7 @@ const config = {
   // @ts-ignore
   plugins: [require("tailwindcss-animate")],
   // @ts-ignore
-  // presets: [require("@acme/tailwind-config")],
+  presets: [require("@acme/tailwind-config")],
 };
 
 module.exports = config;
