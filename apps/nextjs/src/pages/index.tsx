@@ -54,7 +54,7 @@ export default function IndexPage() {
               target="_blank"
               rel="noreferrer"
               href={siteConfig.links.github}
-              className={buttonVariants({ variant: "outline", size: "lg" })}
+              className={`${buttonVariants({ variant: "outline", size: "lg" })} border-red-700`}
             >
               GitHub
             </Link>

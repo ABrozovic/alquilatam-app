@@ -12,6 +12,19 @@ const config = {
       },
     },
     extend: {
+      colors: {
+        brand: {
+          100: "#F6F3F3",
+          200: "#E5D8D8",
+          300: "#D7BDBD",
+          400: "#CEA2A2",
+          500: "#C98585",
+          600: "#CA6666",
+          700: "#D14343",
+          800: "#B84040",
+          900: "#844545",
+        },
+      },
       fontFamily: {
         sans: ["var(--font-sans)", ...fontFamily.sans],
       },
