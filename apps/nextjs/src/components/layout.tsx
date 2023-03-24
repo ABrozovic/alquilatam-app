@@ -8,7 +8,7 @@ export function Layout({ children }: LayoutProps) {
   return (
     <>
       <SiteHeader />
-      <main>{children}</main>
+      <main className="flex h-full w-full flex-1">{children}</main>
     </>
   );
 }

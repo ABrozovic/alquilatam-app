@@ -1,9 +1,9 @@
 import {
   Laptop,
+  Menu,
   Moon,
   SunMedium,
   Twitter,
-  Menu,
   type Icon as LucideIcon,
   type LucideProps,
 } from "lucide-react";
@@ -13,7 +13,7 @@ import Logo from "./svg/logo";
 export type Icon = LucideIcon;
 
 export const Icons = {
-  menu:Menu,
+  menu: Menu,
   sun: SunMedium,
   moon: Moon,
   laptop: Laptop,
