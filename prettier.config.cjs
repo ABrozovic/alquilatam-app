@@ -26,6 +26,7 @@ const config = {
     "^~/(.*)$",
     "^[./]",
   ],
+  endOfLine: "lf",
   importOrderSeparation: false,
   importOrderSortSpecifiers: true,
   importOrderBuiltinModulesToTop: true,
