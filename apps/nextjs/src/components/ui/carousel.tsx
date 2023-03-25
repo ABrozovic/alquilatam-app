@@ -4,8 +4,6 @@ import Link from "next/link";
 import Autoplay from "embla-carousel-autoplay";
 import useEmblaCarousel from "embla-carousel-react";
 
-import { NextButton, PrevButton } from "./carousel-buttons";
-
 type AutoCarouselProps = {
   minHeight?: string;
   maxHeight?: string;
@@ -24,9 +22,16 @@ const AutoCarousel: React.FC<AutoCarouselProps> = ({
   maxHeight,
   timeInSecs,
 }) => {
-  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true }, [
-    Autoplay({ delay: timeInSecs ? timeInSecs * 1000 : 2000 }),
-  ]);
+  const [emblaRef, emblaApi] = useEmblaCarousel(
+    {
+      loop: true,
+      breakpoints: {
+        "(min-width: 768px)": { slidesToScroll: 2 },
+        "(min-width: 1024px)": { slidesToScroll: 3 },
+      },
+    },
+    [Autoplay({ delay: timeInSecs ? timeInSecs * 1000 : 8000 })],
+  );
   const [prevBtnEnabled, setPrevBtnEnabled] = useState(false);
   const [nextBtnEnabled, setNextBtnEnabled] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -63,21 +68,21 @@ const AutoCarousel: React.FC<AutoCarouselProps> = ({
     slides.length % 2 !== 0 &&
     slides.push(slides[0] as AutoCarouselProps["slides"][number]);
   return (
-    <div className="flex flex-1">
-      <PrevButton onClick={scrollPrev} enabled={prevBtnEnabled} />
-      <NextButton onClick={scrollNext} enabled={nextBtnEnabled} />
+    <div className="embla flex flex-1 items-center">
+      {/* <PrevButton onClick={scrollPrev} enabled={prevBtnEnabled} />
+      <NextButton onClick={scrollNext} enabled={nextBtnEnabled} /> */}
       <div
-        className="embla__viewport flex h-96 flex-1 overflow-hidden"
+        className="embla__viewport flex flex-1 overflow-hidden"
         ref={emblaRef}
         style={{
           minHeight: minHeight,
           maxHeight: maxHeight,
         }}
       >
-        <div className="embla__container flex flex-1 flex-row">
+        <div className="embla__container flex h-auto flex-1 flex-row">
           {slides.map((slide) => (
             <div
-              className="embla__slide relative w-1/3 flex-shrink-0 flex-grow-0"
+              className="embla__slide relative shrink-0 grow-0 basis-full md:basis-1/2 lg:basis-1/3"
               key={slide.id}
             >
               <Link href={slide.link ? `${slide.link}` : "#"}>
@@ -89,6 +94,7 @@ const AutoCarousel: React.FC<AutoCarouselProps> = ({
                   }}
                 >
                   <Image
+                    className="block"
                     placeholder="blur"
                     blurDataURL={slide.blur}
                     style={{ objectFit: "contain" }}

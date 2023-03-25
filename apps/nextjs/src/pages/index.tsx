@@ -56,9 +56,9 @@ export default function IndexPage() {
           <link rel="icon" href="/favicon.ico" />
         </Head>
 
-        <section className="container flex-1  gap-6 pt-6 pb-8 ">
+        <section className="container flex min-h-full flex-1 pt-6 pb-6 ">
           <div className="flex flex-1 flex-col gap-6">
-            <div className="flex flex-col gap-6">
+            <div className="flex flex-col gap-2 sm:gap-6">
               <div className="flex w-full items-center justify-between gap-8">
                 <Link
                   href={siteConfig.links.docs}
@@ -84,20 +84,26 @@ export default function IndexPage() {
                 </Link>
               </div>
               <h1 className="text-brand-700 text-center text-xl font-extrabold leading-tight tracking-tighter">
-                Alquila cualquier objeto que necesites con Alquilatam: La
-                plataforma de economía colaborativa para compartir y ahorra!
+                {`Alquila cualquier objeto que necesites con Alquilatam: `}
+                <br className="inline text-base sm:text-lg xl:hidden" />
+                La plataforma de economía colaborativa para compartir y ahorra!
               </h1>
               <AdBanner />
             </div>
-            <div className="flex flex-[8] flex-col justify-evenly"></div>
-            <Input type="text" placeholder="Que Buscas?" />
-            <AutoCarousel
-              slides={images}
-              minHeight="30vh"
-              maxHeight="50vh"
-              timeInSecs={8}
-            />
-            <AdBanner />
+            <div className="flex flex-1 flex-col justify-evenly gap-8">
+              <Input
+                type="text"
+                placeholder="Que Buscas?"
+                className="border-brand-700 focus:ring-brand-500 flex h-10 w-full rounded-xl border bg-transparent py-2 px-3 text-sm placeholder:text-center placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:border-slate-700 dark:text-slate-50 dark:focus:ring-slate-400 dark:focus:ring-offset-slate-900"
+              />
+              <AutoCarousel
+                slides={images}
+                minHeight="30vh"
+                maxHeight="50vh"
+                timeInSecs={8}
+              />
+              <AdBanner />
+            </div>
           </div>
         </section>
       </Layout>
