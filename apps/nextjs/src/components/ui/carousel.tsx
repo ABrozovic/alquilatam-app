@@ -4,6 +4,8 @@ import Link from "next/link";
 import Autoplay from "embla-carousel-autoplay";
 import useEmblaCarousel from "embla-carousel-react";
 
+import { DotButton, NextButton, PrevButton } from "./carousel-buttons";
+
 type AutoCarouselProps = {
   minHeight?: string;
   maxHeight?: string;
@@ -68,50 +70,62 @@ const AutoCarousel: React.FC<AutoCarouselProps> = ({
     slides.length % 2 !== 0 &&
     slides.push(slides[0] as AutoCarouselProps["slides"][number]);
   return (
-    <div className="embla flex flex-1 items-center">
-      {/* <PrevButton onClick={scrollPrev} enabled={prevBtnEnabled} />
-      <NextButton onClick={scrollNext} enabled={nextBtnEnabled} /> */}
-      <div
-        className="embla__viewport flex flex-1 overflow-hidden"
-        ref={emblaRef}
-        style={{
-          minHeight: minHeight,
-          maxHeight: maxHeight,
-        }}
-      >
-        <div className="embla__container flex h-auto flex-1 flex-row">
-          {slides.map((slide) => (
-            <div
-              className="embla__slide relative shrink-0 grow-0 basis-full md:basis-1/2 lg:basis-1/3"
-              key={slide.id}
-            >
-              <Link href={slide.link ? `${slide.link}` : "#"}>
-                <div
-                  style={{
-                    position: "relative",
-                    width: "100%",
-                    height: maxHeight,
-                  }}
-                >
-                  <Image
-                    className="block"
-                    placeholder="blur"
-                    blurDataURL={slide.blur}
-                    style={{ objectFit: "contain" }}
-                    alt={slide.alt}
-                    src={slide.src}
-                    fill
-                    sizes="(max-width: 768px) 100vw,
+    <>
+      <div className="embla__dots absolute bottom-12 left-1/2 z-10 hidden w-96  -translate-x-1/2 items-center justify-center md:flex">
+        {scrollSnaps.map((_, index) => (
+          <DotButton
+            key={index}
+            selected={index === selectedIndex}
+            onClick={() => scrollTo(index)}
+          />
+        ))}
+      </div>
+      <div className="embla flex flex-1 items-center justify-center">
+        <PrevButton onClick={scrollPrev} enabled={prevBtnEnabled} />
+
+        <div
+          className="embla__viewport flex flex-1 overflow-hidden"
+          ref={emblaRef}
+          style={{
+            minHeight: minHeight,
+            maxHeight: maxHeight,
+          }}
+        >
+          <div className="embla__container flex h-auto flex-1 flex-row">
+            {slides.map((slide) => (
+              <div
+                className="embla__slide relative shrink-0 grow-0 basis-full px-4 md:basis-1/2 lg:basis-1/3"
+                key={slide.id}
+              >
+                <Link href={slide.link ? `${slide.link}` : "#"}>
+                  <div
+                    style={{
+                      position: "relative",
+                      width: "100%",
+                      height: maxHeight,
+                    }}
+                  >
+                    <Image
+                      className="block"
+                      placeholder="blur"
+                      blurDataURL={slide.blur}
+                      style={{ objectFit: "contain" }}
+                      alt={slide.alt}
+                      src={slide.src}
+                      fill
+                      sizes="(max-width: 768px) 100vw,
               (max-width: 1200px) 50vw,
               33vw"
-                  />
-                </div>
-              </Link>
-            </div>
-          ))}
+                    />
+                  </div>
+                </Link>
+              </div>
+            ))}
+          </div>
         </div>
+        <NextButton onClick={scrollNext} enabled={nextBtnEnabled} />
       </div>
-    </div>
+    </>
   );
 };
 
