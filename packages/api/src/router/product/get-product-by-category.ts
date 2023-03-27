@@ -1,16 +1,25 @@
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
-import { type PrismaClient } from "@acme/db";
+import { type PrismaClient, type Product } from "@acme/db";
 
+import { type RouterOutputs } from "../../trpc";
 import { isTRPCClientError } from "../../util/error-handler";
 
 export const getProductByCategorySchema = z.object({
-  categoryId: z.string(),
+  categorySlug: z.string(),
   pageSize: z.number().optional(),
   cursor: z.string().nullish(),
 });
 export type GetProductByCategory = z.infer<typeof getProductByCategorySchema>;
+
+type ExtractProducts<T> = T extends { products: Product[] }
+  ? Pick<T, "products">
+  : never;
+export type ProductByCategory = ExtractProducts<
+  Exclude<RouterOutputs["product"]["getByCategory"], undefined>
+>["products"][number];
+
 export const getProductByCategory = async ({
   prisma,
   data,
@@ -19,13 +28,15 @@ export const getProductByCategory = async ({
   data: GetProductByCategory;
 }) => {
   const limit = data.pageSize ?? 5;
-  const { categoryId, cursor } = data;
+  const { categorySlug, cursor } = data;
   try {
     const products = await prisma.product.findMany({
       take: limit + 1,
       cursor: cursor ? { id: cursor } : undefined,
       where: {
-        categoryId,
+        category: {
+          slug: categorySlug,
+        },
       },
       include: {
         images: true,

@@ -55,4 +55,18 @@ export const categoryRouter = createTRPCRouter({
         }),
       );
     }),
+  getBySlug: protectedProcedure
+    .input(z.object({ slug: z.string() }))
+    .query(async ({ ctx, input }) => {
+      const { slug } = input;
+      return trpcWithErrorHandling(
+        ctx.prisma.category.findUnique({
+          where: { slug },
+          include: {
+            autocomplete: true,
+            image: true,
+          },
+        }),
+      );
+    }),
 });

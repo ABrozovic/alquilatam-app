@@ -70,8 +70,8 @@ const AutoCarousel: React.FC<AutoCarouselProps> = ({
     slides.length % 2 !== 0 &&
     slides.push(slides[0] as AutoCarouselProps["slides"][number]);
   return (
-    <>
-      <div className="embla__dots absolute bottom-12 left-1/2 z-10 hidden w-96  -translate-x-1/2 items-center justify-center md:flex">
+    <div className="relative">
+      <div className="embla__dots absolute bottom-0 left-1/2 z-10 hidden w-96  -translate-x-1/2 items-center justify-center md:flex">
         {scrollSnaps.map((_, index) => (
           <DotButton
             key={index}
@@ -125,7 +125,7 @@ const AutoCarousel: React.FC<AutoCarouselProps> = ({
         </div>
         <NextButton onClick={scrollNext} enabled={nextBtnEnabled} />
       </div>
-    </>
+    </div>
   );
 };
 

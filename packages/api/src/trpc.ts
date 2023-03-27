@@ -7,17 +7,26 @@
  * The pieces you will need to use are documented accordingly near the end
  */
 
+import type { GetServerSidePropsContext } from "next";
 import type {
   SignedInAuthObject,
   SignedOutAuthObject,
 } from "@clerk/nextjs/dist/api";
 import { getAuth } from "@clerk/nextjs/server";
-import { TRPCError, initTRPC, type inferAsyncReturnType } from "@trpc/server";
+import {
+  TRPCError,
+  initTRPC,
+  type inferAsyncReturnType,
+  type inferRouterInputs,
+  type inferRouterOutputs,
+} from "@trpc/server";
 import { type CreateNextContextOptions } from "@trpc/server/adapters/next";
 import superjson from "superjson";
 import { ZodError } from "zod";
 
 import { prisma } from "@acme/db";
+
+import { type AppRouter } from "./root";
 
 /**
  * 1. CONTEXT
@@ -52,7 +61,9 @@ const createInnerTRPCContext = ({ auth }: CreateContextOptions) => {
  * This is the actual context you'll use in your router
  * @link https://trpc.io/docs/context
  **/
-export const createTRPCContext = (opts: CreateNextContextOptions) => {
+export const createTRPCContext = (
+  opts: CreateNextContextOptions | GetServerSidePropsContext,
+) => {
   return createInnerTRPCContext({ auth: getAuth(opts.req) });
 };
 
@@ -151,3 +162,13 @@ const enforceUserIsAdmin = t.middleware(({ ctx, next }) => {
  * @see https://trpc.io/docs/procedures
  */
 export const adminProcedure = t.procedure.use(enforceUserIsAdmin);
+/**
+ * Inference helper for inputs
+ * @example type HelloInput = RouterInputs['example']['hello']
+ **/
+export type RouterInputs = inferRouterInputs<AppRouter>;
+/**
+ * Inference helper for outputs
+ * @example type HelloOutput = RouterOutputs['example']['hello']
+ **/
+export type RouterOutputs = inferRouterOutputs<AppRouter>;
