@@ -27,6 +27,7 @@ const Form = <T extends FieldValues>({
   return (
     <FormProvider {...form}>
       <form
+        className="h-full w-full"
         onSubmit={
           logger
             ? handleVoidPromise(form.handleSubmit(onSubmit, console.log))

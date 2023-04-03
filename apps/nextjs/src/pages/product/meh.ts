@@ -5,7 +5,8 @@ export const productMeh = {
   name: "Vaso termico buba de medio litro",
   type: "vaso termico",
   brand: "bubba",
-  description: "vaso o taza termica marca bubba de medio litro vaso o taza termica marca bubba de medio litro vaso o taza termica marca bubba de medio litro vaso o taza termica marca bubba de medio litro",
+  description:
+    "vaso o taza termica marca bubba de medio litro vaso o taza termica marca bubba de medio litro vaso o taza termica marca bubba de medio litro vaso o taza termica marca bubba de medio litro",
   price: 20,
   priceType: "dia",
   timeRange: 7,
@@ -41,7 +42,6 @@ export const productMeh = {
       productId: "/category/ropa",
       size: 1,
     },
-
   ] as ProductImage[],
   category: {
     id: "deportes-y-recreacion",
