@@ -88,49 +88,27 @@ const CreateProduct = () => {
             register={register("description")}
           />
           <div className="flex gap-4">
+            <div>
+              <HookFormImput
+                className="w-40"
+                label="Precio"
+                placeholder="Ej: 100"
+                errors={errors}
+                register={register("price")}
+              />
+            </div>
             <Controller
-              name="categoryId"
+              name="priceType"
               control={control}
               render={({ field: { onChange } }) => (
-                <div className="w-full">
-                  <Label htmlFor="Precio" className="text-brand-700">
-                    Precio:
-                  </Label>
-                  <Select onValueChange={(val) => console.log(val)}>
-                    <SelectTrigger className="border-brand-700 w-full">
-                      <SelectValue
-                        className="text-red-500"
-                        placeholder={
-                          <span className="text-slate-400">Ej: 100</span>
-                        }
-                      />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="test">1</SelectItem>
-                      <SelectItem value="tesat">2</SelectItem>
-                      <SelectItem value="tesaadt">3</SelectItem>
-                      <SelectItem value="tesaat">4</SelectItem>
-                      <SelectItem value="tedst">5</SelectItem>
-                      <SelectItem value="tfest">6</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-              )}
-            />
-            <Controller
-              name="categoryId"
-              control={control}
-              render={({ field: { onChange } }) => (
-                <div className="w-full">
+                <div className="w-40">
                   <br />
                   <Select onValueChange={(val) => console.log(val)}>
                     <SelectTrigger className="border-brand-700 w-full">
                       <SelectValue
                         className="text-red-500"
                         placeholder={
-                          <span className="text-slate-400">
-                            Ej: Entretenimiento
-                          </span>
+                          <span className="text-slate-400">Ej: Por mes</span>
                         }
                       />
                     </SelectTrigger>
@@ -147,53 +125,29 @@ const CreateProduct = () => {
               )}
             />
           </div>
-
+          <Label htmlFor={register?.name} className="text-brand-700">
+            Tiempo minimo de alquiler:
+          </Label>
           <div className="flex gap-4">
+            <div>
+              <HookFormImput
+                className="w-40"
+                placeholder="Ej: 1"
+                errors={errors}
+                register={register("timeRange")}
+              />
+            </div>
             <Controller
-              name="categoryId"
+              name="timeRangeType"
               control={control}
               render={({ field: { onChange } }) => (
-                <div className="w-full">
-                  <Label htmlFor={register?.name} className="text-brand-700">
-                    TIEMPO MINIMO DE ALQUILER:
-                  </Label>
+                <div className="w-40">
                   <Select onValueChange={(val) => console.log(val)}>
                     <SelectTrigger className="border-brand-700 w-full">
                       <SelectValue
                         className="text-red-500"
                         placeholder={
-                          <span className="text-slate-400">
-                            Ej: Entretenimiento
-                          </span>
-                        }
-                      />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="test">1</SelectItem>
-                      <SelectItem value="tesat">2</SelectItem>
-                      <SelectItem value="tesaadt">3</SelectItem>
-                      <SelectItem value="tesaat">4</SelectItem>
-                      <SelectItem value="tedst">5</SelectItem>
-                      <SelectItem value="tfest">6</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-              )}
-            />
-            <Controller
-              name="categoryId"
-              control={control}
-              render={({ field: { onChange } }) => (
-                <div className="w-full">
-                  <br />
-                  <Select onValueChange={(val) => console.log(val)}>
-                    <SelectTrigger className="border-brand-700 w-full">
-                      <SelectValue
-                        className="text-red-500"
-                        placeholder={
-                          <span className="text-slate-400">
-                            Ej: Entretenimiento
-                          </span>
+                          <span className="text-slate-400">Ej: 1 mes</span>
                         }
                       />
                     </SelectTrigger>
