@@ -1,8 +1,6 @@
-import React from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
 
-import { productSchema } from "@acme/api/src/router/product/schema";
 import {
   updateProductSchema,
   type UpdateProduct,
@@ -11,9 +9,9 @@ import {
 import { useZodForm } from "~/components/form/use-zod-form";
 import Form from "~/components/form/zod-form";
 import { Layout } from "~/components/layout";
+import Dropzone from "~/components/ui/dropzone";
 import HookFormImput from "~/components/ui/hookFormInput";
 import HookFormTextArea from "~/components/ui/hookFormTextArea";
-import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
 import {
   Select,
@@ -217,6 +215,20 @@ const CreateProduct = () => {
             placeholder="Ej: Ej: Santa Cruz de la Sierra"
             errors={errors}
             register={register("city")}
+          />
+          <Controller
+            control={control}
+            name="images"
+            render={({
+              field: { onChange },
+              fieldState: { invalid, isTouched, isDirty, error },
+              formState,
+            }) => (
+              <Dropzone
+                onFilesChanged={(files) => onChange(files)}
+                onError={(error) => console.log(error)}
+              />
+            )}
           />
         </Form>
       </div>
