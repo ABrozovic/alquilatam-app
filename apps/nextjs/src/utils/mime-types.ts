@@ -1,22 +1,22 @@
-export type CommonMimeTypes = keyof typeof commonMimeTypes;
+export type CommonMimeType = keyof typeof commonMimeTypes;
 export const commonMimeTypes = {
   "application/atom+xml": {
-    extensions: ["atom"],
+    extensions: [".atom"],
   },
   "application/java-archive": {
-    extensions: ["jar", "war", "ear"],
+    extensions: [".jar", "war", "ear"],
   },
   "application/javascript": {
-    extensions: ["js"],
+    extensions: [".js"],
   },
   "application/json": {
-    extensions: ["json"],
+    extensions: [".json"],
   },
   "application/mac-binhex40": {
-    extensions: ["hqx"],
+    extensions: [".hqx"],
   },
   "application/msword": {
-    extensions: ["doc"],
+    extensions: [".doc"],
   },
   "application/octet-stream": {
     extensions: [
@@ -33,301 +33,228 @@ export const commonMimeTypes = {
     ],
   },
   "application/pdf": {
-    extensions: ["pdf"],
+    extensions: [".pdf"],
   },
   "application/postscript": {
-    extensions: ["ps", "eps", "ai"],
+    extensions: [".ps", "eps", "ai"],
   },
   "application/rss+xml": {
-    extensions: ["rss"],
+    extensions: [".rss"],
   },
   "application/rtf": {
-    extensions: ["rtf"],
+    extensions: [".rtf"],
   },
   "application/vnd.apple.mpegurl": {
-    extensions: ["m3u8"],
+    extensions: [".m3u8"],
   },
   "application/vnd.google-earth.kml+xml": {
-    extensions: ["kml"],
+    extensions: [".kml"],
   },
   "application/vnd.google-earth.kmz": {
-    extensions: ["kmz"],
+    extensions: [".kmz"],
   },
   "application/vnd.ms-excel": {
-    extensions: ["xls"],
+    extensions: [".xls"],
   },
   "application/vnd.ms-fontobject": {
-    extensions: ["eot"],
+    extensions: [".eot"],
   },
   "application/vnd.ms-powerpoint": {
-    extensions: ["ppt"],
+    extensions: [".ppt"],
   },
   "application/vnd.oasis.opendocument.graphics": {
-    extensions: ["odg"],
+    extensions: [".odg"],
   },
   "application/vnd.oasis.opendocument.presentation": {
-    extensions: ["odp"],
+    extensions: [".odp"],
   },
   "application/vnd.oasis.opendocument.spreadsheet": {
-    extensions: ["ods"],
+    extensions: [".ods"],
   },
   "application/vnd.oasis.opendocument.text": {
-    extensions: ["odt"],
+    extensions: [".odt"],
   },
   "application/vnd.openxmlformats-officedocument.presentationml.presentation": {
-    extensions: ["pptx"],
+    extensions: [".pptx"],
   },
   "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": {
-    extensions: ["xlsx"],
+    extensions: [".xlsx"],
   },
   "application/vnd.openxmlformats-officedocument.wordprocessingml.document": {
-    extensions: ["docx"],
+    extensions: [".docx"],
   },
   "application/vnd.wap.wmlc": {
-    extensions: ["wmlc"],
+    extensions: [".wmlc"],
   },
   "application/wasm": {
-    extensions: ["wasm"],
+    extensions: [".wasm"],
   },
   "application/x-7z-compressed": {
-    extensions: ["7z"],
+    extensions: [".7z"],
   },
   "application/x-cocoa": {
-    extensions: ["cco"],
+    extensions: [".cco"],
   },
   "application/x-java-archive-diff": {
-    extensions: ["jardiff"],
+    extensions: [".jardiff"],
   },
   "application/x-java-jnlp-file": {
-    extensions: ["jnlp"],
+    extensions: [".jnlp"],
   },
   "application/x-makeself": {
-    extensions: ["run"],
+    extensions: [".run"],
   },
   "application/x-perl": {
-    extensions: ["pl", "pm"],
+    extensions: [".pl", "pm"],
   },
   "application/x-pilot": {
-    extensions: ["prc", "pdb"],
+    extensions: [".prc", "pdb"],
   },
   "application/x-rar-compressed": {
-    extensions: ["rar"],
+    extensions: [".rar"],
   },
   "application/x-redhat-package-manager": {
-    extensions: ["rpm"],
+    extensions: [".rpm"],
   },
   "application/x-sea": {
-    extensions: ["sea"],
+    extensions: [".sea"],
   },
   "application/x-shockwave-flash": {
-    extensions: ["swf"],
+    extensions: [".swf"],
   },
   "application/x-stuffit": {
-    extensions: ["sit"],
+    extensions: [".sit"],
   },
   "application/x-tcl": {
-    extensions: ["tcl", "tk"],
+    extensions: [".tcl", "tk"],
   },
   "application/x-x509-ca-cert": {
-    extensions: ["der", "pem", "crt"],
+    extensions: [".der", "pem", "crt"],
   },
   "application/x-xpinstall": {
-    extensions: ["xpi"],
+    extensions: [".xpi"],
   },
   "application/xhtml+xml": {
-    extensions: ["xhtml"],
+    extensions: [".xhtml"],
   },
   "application/xspf+xml": {
-    extensions: ["xspf"],
+    extensions: [".xspf"],
   },
   "application/zip": {
-    extensions: ["zip"],
+    extensions: [".zip"],
   },
   "audio/midi": {
-    extensions: ["mid", "midi", "kar"],
+    extensions: [".mid", "midi", "kar"],
   },
   "audio/mpeg": {
-    extensions: ["mp3"],
+    extensions: [".mp3"],
   },
   "audio/ogg": {
-    extensions: ["ogg"],
+    extensions: [".ogg"],
   },
   "audio/x-m4a": {
-    extensions: ["m4a"],
+    extensions: [".m4a"],
   },
   "audio/x-realaudio": {
-    extensions: ["ra"],
+    extensions: [".ra"],
   },
   "font/woff": {
-    extensions: ["woff"],
+    extensions: [".woff"],
   },
   "font/woff2": {
-    extensions: ["woff2"],
+    extensions: [".woff2"],
   },
   "image/avif": {
-    extensions: ["avif"],
+    extensions: [".avif"],
   },
   "image/gif": {
-    extensions: ["gif"],
+    extensions: [".gif"],
   },
   "image/jpeg": {
-    extensions: ["jpeg", "jpg"],
+    extensions: [".jpeg", "jpg"],
   },
   "image/png": {
-    extensions: ["png"],
+    extensions: [".png"],
   },
   "image/svg+xml": {
-    extensions: ["svg", "svgz"],
+    extensions: [".svg", "svgz"],
   },
   "image/tiff": {
-    extensions: ["tif", "tiff"],
+    extensions: [".tif", "tiff"],
   },
   "image/vnd.wap.wbmp": {
-    extensions: ["wbmp"],
+    extensions: [".wbmp"],
   },
   "image/webp": {
-    extensions: ["webp"],
+    extensions: [".webp"],
   },
   "image/x-icon": {
-    extensions: ["ico"],
+    extensions: [".ico"],
   },
   "image/x-jng": {
-    extensions: ["jng"],
+    extensions: [".jng"],
   },
   "image/x-ms-bmp": {
-    extensions: ["bmp"],
+    extensions: [".bmp"],
   },
   "text/css": {
-    extensions: ["css"],
+    extensions: [".css"],
   },
   "text/html": {
-    extensions: ["html", "htm", "shtml"],
+    extensions: [".html", "htm", "shtml"],
   },
   "text/mathml": {
-    extensions: ["mml"],
+    extensions: [".mml"],
   },
   "text/plain": {
-    extensions: ["txt"],
+    extensions: [".txt"],
   },
   "text/vnd.sun.j2me.app-descriptor": {
-    extensions: ["jad"],
+    extensions: [".jad"],
   },
   "text/vnd.wap.wml": {
-    extensions: ["wml"],
+    extensions: [".wml"],
   },
   "text/x-component": {
-    extensions: ["htc"],
+    extensions: [".htc"],
   },
   "text/xml": {
-    extensions: ["xml"],
+    extensions: [".xml"],
   },
   "video/3gpp": {
-    extensions: ["3gpp", "3gp"],
+    extensions: [".3gpp", "3gp"],
   },
   "video/mp2t": {
-    extensions: ["ts"],
+    extensions: [".ts"],
   },
   "video/mp4": {
-    extensions: ["mp4"],
+    extensions: [".mp4"],
   },
   "video/mpeg": {
-    extensions: ["mpeg", "mpg"],
+    extensions: [".mpeg", "mpg"],
   },
   "video/quicktime": {
-    extensions: ["mov"],
+    extensions: [".mov"],
   },
   "video/webm": {
-    extensions: ["webm"],
+    extensions: [".webm"],
   },
   "video/x-flv": {
-    extensions: ["flv"],
+    extensions: [".flv"],
   },
   "video/x-m4v": {
-    extensions: ["m4v"],
+    extensions: [".m4v"],
   },
   "video/x-mng": {
-    extensions: ["mng"],
+    extensions: [".mng"],
   },
   "video/x-ms-asf": {
-    extensions: ["asx", "asf"],
+    extensions: [".asx", "asf"],
   },
   "video/x-ms-wmv": {
-    extensions: ["wmv"],
+    extensions: [".wmv"],
   },
   "video/x-msvideo": {
-    extensions: ["avi"],
+    extensions: [".avi"],
   },
-} ;
-
-const acceptedMimeTypes = [
-  "application/atom+xml",
-  "application/java-archive",
-  "application/javascript",
-  "application/json",
-  "application/mac-binhex40",
-  "application/msword",
-  "application/octet-stream",
-  "application/pdf",
-  "application/postscript",
-  "application/rss+xml",
-  "application/rtf",
-  "application/vnd.apple.mpegurl",
-  "application/vnd.google-earth.kml+xml",
-  "application/vnd.google-earth.kmz",
-  "application/vnd.ms-excel",
-  "application/vnd.ms-fontobject",
-  "application/vnd.ms-powerpoint",
-  "application/vnd.oasis.opendocument.graphics",
-  "application/vnd.oasis.opendocument.presentation",
-  "application/vnd.oasis.opendocument.spreadsheet",
-  "application/vnd.oasis.opendocument.text",
-  "application/vnd.openxmlformats-officedocument.presentationml.presentation",
-  "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-  "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-  "application/vnd.wap.wmlc",
-  "application/wasm",
-  "application/x-7z-compressed",
-  "application/x-cocoa",
-  "application/x-java-archive-diff",
-  "application/x-java-jnlp-file",
-  "application/x-makeself",
-  "application/x-perl",
-  "application/x-pilot",
-  "application/x-rar-compressed",
-  "application/x-redhat-package-manager",
-  "application/x-sea",
-  "application/x-shockwave-flash",
-  "application/x-stuffit",
-  "application/x-tcl",
-  "application/x-x509-ca-cert",
-  "application/x-xpinstall",
-  "application/xhtml+xml",
-  "application/xspf+xml",
-  "application/zip",
-  "audio/midi",
-  "audio/mpeg",
-  "audio/ogg",
-  "audio/x-m4a",
-  "audio/x-realaudio",
-  "font/woff",
-  "font/woff2",
-  "image/avif",
-  "image/gif",
-  "image/jpeg",
-  "image/png",
-  "image/svg+xml",
-  "image/tiff",
-  "image/vnd.wap.wbmp",
-  "image/webp",
-  "video/3gpp",
-  "video/3gpp2",
-  "video/avi",
-  "video/mpeg",
-  "video/ogg",
-  "video/quicktime",
-  "video/webm",
-  "video/x-flv",
-  "video/x-msvideo",
-  "video/x-ms-wmv",
-  "video/mp4"
-  ];
+};

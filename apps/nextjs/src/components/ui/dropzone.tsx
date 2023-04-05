@@ -1,8 +1,8 @@
 import Image from "next/image";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useDropzone } from "react-dropzone";
-import { z } from "zod";
-import { type CommonMimeTypes } from "~/utils/mime-types";
+import useFileInput from "~/hooks/use-file-input";
+import { commonMimeTypes, type CommonMimeType } from "~/utils/mime-types";
 import { Dialog, DialogContent } from "./dialog";
 
 type FileObject = {
@@ -11,105 +11,39 @@ type FileObject = {
   preview: string;
 };
 
-const MB_BYTES = 1000000;
-
 type DropzoneProps = {
   onFilesChanged: (files: FileObject[]) => void;
   onError?: (err: string) => void;
   multiple?: boolean;
   maxNumberOfFiles?: number;
-  acceptedMimeTypes?: CommonMimeTypes[];
-  maxFileSizePerItemInMB?: number;
+  acceptedMimeTypes?: CommonMimeType[];
+  maxFileSizePerFileInMB?: number;
   defaultValue?: FileObject[];
 };
 const Dropzone: React.FC<DropzoneProps> = ({
-  maxFileSizePerItemInMB = 3,
-  maxNumberOfFiles = 4,
+  maxFileSizePerFileInMB = 3,
+  maxNumberOfFiles = 3,
   onFilesChanged,
-  onError,
-  acceptedMimeTypes = [],
+  acceptedMimeTypes = ["image/jpeg", "image/png"],
   defaultValue = [],
   multiple = true,
 }) => {
   const [showModal, setShowModal] = useState(false);
   const [modalImg, setModalImg] = useState<FileObject | null>(null);
-  const [previews, setPreviews] = useState<FileObject[]>(defaultValue);
   const [error, setError] = useState<string>();
   const onFilesChangedRef = useRef(onFilesChanged);
-  const maxFileSizePerItem = maxFileSizePerItemInMB * MB_BYTES;
-  const imageArray = z
-    .array(z.any())
-    .max(maxNumberOfFiles, {
-      message: `You can only add up to ${maxNumberOfFiles} images`,
-    })
-    .superRefine((f, ctx) => {
-      for (let i = 0; i < f.length; i++) {
-        const { id, file } = f[i] as FileObject;
-        if (!defaultValue.map(({ id }) => id).includes(id)) {
-          if (!acceptedMimeTypes.includes(file?.type as CommonMimeTypes)) {
-            ctx.addIssue({
-              code: z.ZodIssueCode.custom,
-              message: `File at index ${i} must be one of [${acceptedMimeTypes.join(
-                ", ",
-              )}] but was ${file?.type}`,
-            });
-          }
-        }
-        if (file && file.size > maxFileSizePerItem) {
-          ctx.addIssue({
-            code: z.ZodIssueCode.too_big,
-            type: "array",
-            message: `The file at index ${i} must not be larger than ${maxFileSizePerItem} bytes: ${file.size}`,
-            maximum: maxFileSizePerItem,
-            inclusive: true,
-          });
-        }
-      }
-    });
-  const handleDrop = (acceptedFiles: File[]) => {
-    setError("");
-    const newFiles: File[] = [];
-    const newPreviews: string[] = [];
-    const newFilesWithPreviews: FileObject[] = [];
-    acceptedFiles.forEach((file) => {
-      const existingFile = previews.find(
-        ({ file: f }) =>
-          f?.name === file.name &&
-          f?.length === file.length &&
-          f?.type === file.type,
-      );
-      if (!existingFile) {
-        const preview = {
-          preview: URL.createObjectURL(file),
-          id: crypto.randomUUID(),
-        };
-        newPreviews.push(URL.createObjectURL(file));
-        newFiles.push(file);
-        newFilesWithPreviews.push({
-          file,
-          ...preview,
-        });
-      }
-    });
-    const total = [...previews, ...newFilesWithPreviews];
-    try {
-      imageArray.parse(total);
-      setPreviews((prevFiles) => {
-        return [...prevFiles, ...newFilesWithPreviews];
-      });
-    } catch (err) {
-      if (err instanceof z.ZodError) {
-        onError && err.issues[0] && onError(err.issues[0].message);
-        onError && err.message && onError(err.message);
-        setError((err.issues[0] && err.issues[0].message) || err.message);
-      }
-    }
-  };
-  const handleRemove = (index: number) => {
-    setPreviews((prev) => prev.filter((_, i) => i !== index));
-  };
 
-  const thumbnails = previews.map((preview, index) => {
+  const { files, handleDrop, handleRemove } = useFileInput({
+    maxNumberOfFiles,
+    acceptedMimeTypes,
+    defaultValue,
+    maxFileSizePerFileInMB,
+    onError(err) {
+      setError(err);
+    },
+  });
+
+  const thumbnails = files.map((preview, index) => {
     return (
       <div
         key={preview.id}
@@ -153,16 +87,13 @@ const Dropzone: React.FC<DropzoneProps> = ({
   });
 
   useEffect(() => {
-    onFilesChangedRef.current(previews);
-  }, [previews]);
+    onFilesChangedRef.current(files);
+  }, [files]);
 
   const { getRootProps, getInputProps, isDragAccept, isFocused, isDragReject } =
     useDropzone({
       multiple: multiple,
-      accept: {
-        "image/png": [".png"],
-        "image/jpg": [".jpg"],
-      },
+      accept: buildAcceptedObjects(acceptedMimeTypes),
       onDrop: (acceptedFiles) => {
         handleDrop(acceptedFiles);
       },
@@ -196,7 +127,7 @@ const Dropzone: React.FC<DropzoneProps> = ({
       <div id="parent" className="mx-auto ">
         <div
           {...getRootProps({
-            className: `border-${getColor} border-2 border-dashed p-8 text-center`,
+            className: `border-${getColor} mt-2 border-2 border-dashed p-8 text-center`,
           })}
         >
           <input {...getInputProps()} className="hidden" />
@@ -204,10 +135,10 @@ const Dropzone: React.FC<DropzoneProps> = ({
             Drag and drop some files here, or click to select files
           </p>
         </div>
-        {error && <div className="text-red-500">{error} </div>}
+        {error && <div className="text-red-500 text-center mt-1">{error} </div>}
 
         <div
-          className={`mt-4 grid w-full items-center justify-around justify-items-center gap-4  sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-${previews.length}`}
+          className={`mt-4 grid w-full items-center justify-around justify-items-center gap-4  sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-${files.length}`}
         >
           {thumbnails}
         </div>
@@ -217,3 +148,18 @@ const Dropzone: React.FC<DropzoneProps> = ({
 };
 
 export default Dropzone;
+
+function buildAcceptedObjects(acceptedMimeTypes: string[]): {
+  [key: string]: string[];
+} {
+  const acceptedObjects: {
+    [key: string]: string[];
+  } = {};
+  const mimeTypes = commonMimeTypes as Record<string, { extensions: string[] }>;
+  for (const mimeType of acceptedMimeTypes) {
+    const extensions = mimeTypes[mimeType]?.extensions || [];
+    acceptedObjects[mimeType] = extensions;
+  }
+
+  return acceptedObjects;
+}
