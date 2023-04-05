@@ -1,36 +1,33 @@
-import { useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { z } from "zod";
-
+import { type CommonMimeTypes } from "~/utils/mime-types";
 import { Dialog, DialogContent } from "./dialog";
 
-export interface FileWithPath extends File {
-  readonly path?: string;
-}
 type FileObject = {
   id: string;
-  file: FileWithPath;
+  file: File & { readonly path?: string };
   preview: string;
 };
 
-const IMAGE_MIME_TYPES = ["image/gif", "image/jpeg", "image/png"];
-const MB_BYTES = 1000000; // Number of bytes in a megabyte.
+const MB_BYTES = 1000000;
+
 type DropzoneProps = {
   onFilesChanged: (files: FileObject[]) => void;
   onError?: (err: string) => void;
   multiple?: boolean;
   maxNumberOfFiles?: number;
-  acceptedFileType?: "images";
+  acceptedMimeTypes?: CommonMimeTypes[];
   maxFileSizePerItemInMB?: number;
   defaultValue?: FileObject[];
 };
 const Dropzone: React.FC<DropzoneProps> = ({
-  acceptedFileType = "images",
   maxFileSizePerItemInMB = 3,
   maxNumberOfFiles = 4,
   onFilesChanged,
   onError,
+  acceptedMimeTypes = [],
   defaultValue = [],
   multiple = true,
 }) => {
@@ -39,9 +36,6 @@ const Dropzone: React.FC<DropzoneProps> = ({
   const [previews, setPreviews] = useState<FileObject[]>(defaultValue);
   const [error, setError] = useState<string>();
   const onFilesChangedRef = useRef(onFilesChanged);
-
-  const acceptedMimeTypes =
-    acceptedFileType === "images" ? IMAGE_MIME_TYPES : IMAGE_MIME_TYPES;
   const maxFileSizePerItem = maxFileSizePerItemInMB * MB_BYTES;
   const imageArray = z
     .array(z.any())
@@ -52,7 +46,7 @@ const Dropzone: React.FC<DropzoneProps> = ({
       for (let i = 0; i < f.length; i++) {
         const { id, file } = f[i] as FileObject;
         if (!defaultValue.map(({ id }) => id).includes(id)) {
-          if (!acceptedMimeTypes.includes(file?.type || "")) {
+          if (!acceptedMimeTypes.includes(file?.type as CommonMimeTypes)) {
             ctx.addIssue({
               code: z.ZodIssueCode.custom,
               message: `File at index ${i} must be one of [${acceptedMimeTypes.join(
