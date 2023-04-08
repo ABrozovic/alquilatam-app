@@ -1,8 +1,9 @@
-import Image from "next/image";
 import { useEffect, useMemo, useRef, useState } from "react";
+import Image from "next/image";
 import { useDropzone } from "react-dropzone";
-import useFileInput from "~/hooks/use-file-input";
+
 import { commonMimeTypes, type CommonMimeType } from "~/utils/mime-types";
+import useFileInput from "~/hooks/use-file-input";
 import { Dialog, DialogContent } from "./dialog";
 
 type FileObject = {
@@ -24,7 +25,7 @@ const Dropzone: React.FC<DropzoneProps> = ({
   maxFileSizePerFileInMB = 3,
   maxNumberOfFiles = 3,
   onFilesChanged,
-  acceptedMimeTypes = ["image/jpeg", "image/png"],
+  acceptedMimeTypes = ["image/png"],
   defaultValue = [],
   multiple = true,
 }) => {
@@ -36,7 +37,7 @@ const Dropzone: React.FC<DropzoneProps> = ({
   const { files, handleDrop, handleRemove } = useFileInput({
     maxNumberOfFiles,
     acceptedMimeTypes,
-    defaultValue,
+    defaultFiles: defaultValue,
     maxFileSizePerFileInMB,
     onError(err) {
       setError(err);
@@ -108,6 +109,10 @@ const Dropzone: React.FC<DropzoneProps> = ({
     [isDragAccept, isFocused, isDragReject],
   );
 
+  function clamp(maxColumns: number) {
+    return Math.min(Math.max(files.length, maxColumns), maxNumberOfFiles);
+  }
+
   return (
     <>
       <Dialog open={showModal} onOpenChange={setShowModal}>
@@ -135,10 +140,12 @@ const Dropzone: React.FC<DropzoneProps> = ({
             Drag and drop some files here, or click to select files
           </p>
         </div>
-        {error && <div className="text-red-500 text-center mt-1">{error} </div>}
+        {error && <div className="mt-1 text-center text-red-500">{error} </div>}
 
         <div
-          className={`mt-4 grid w-full items-center justify-around justify-items-center gap-4  sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-${files.length}`}
+          className={`mt-4 grid w-full grid-cols-1 items-center justify-around justify-items-center gap-4 sm:grid-cols-${clamp(
+            2,
+          )} md:grid-cols-${clamp(3)} lg:grid-cols-${clamp(3)}`}
         >
           {thumbnails}
         </div>

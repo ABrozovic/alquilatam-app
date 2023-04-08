@@ -83,7 +83,7 @@ export default function IndexPage() {
                   INICIA SESION
                 </Link>
               </div>
-              <h1 className="text-brand-700 text-center text-xl font-extrabold leading-tight tracking-tighter">
+              <h1 className="text-brand-700 hidden text-center text-xl font-extrabold leading-tight tracking-tighter sm:block">
                 {`Alquila cualquier objeto que necesites con Alquilatam: `}
                 <br className="inline text-base sm:text-lg xl:hidden" />
                 La plataforma de economía colaborativa para compartir y ahorra!
