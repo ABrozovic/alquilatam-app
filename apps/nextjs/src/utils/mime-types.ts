@@ -1,4 +1,22 @@
 export type CommonMimeType = keyof typeof commonMimeTypes;
+export const fetchType = (url: string): string | undefined => {
+  const match = /\.([a-z0-9]+)$/i.exec(url);
+  const extension = match ? `.${match[1]}` : undefined;
+  if (extension) {
+    return fetchTypeByExtension(extension);
+  }
+  return undefined;
+};
+
+const fetchTypeByExtension = (extension: string): string | undefined => {
+  for (const [type, data] of Object.entries(commonMimeTypes)) {
+    if (data.extensions.includes(extension)) {
+      return type;
+    }
+  }
+  return undefined;
+};
+
 export const commonMimeTypes = {
   "application/atom+xml": {
     extensions: [".atom"],
