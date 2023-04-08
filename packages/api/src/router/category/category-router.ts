@@ -35,7 +35,6 @@ export const categoryRouter = createTRPCRouter({
     return trpcWithErrorHandling(
       ctx.prisma.category.findMany({
         include: {
-          autocomplete: true,
           image: true,
         },
       }),
@@ -49,7 +48,6 @@ export const categoryRouter = createTRPCRouter({
         ctx.prisma.category.findUnique({
           where: { id },
           include: {
-            autocomplete: true,
             image: true,
           },
         }),
@@ -63,7 +61,6 @@ export const categoryRouter = createTRPCRouter({
         ctx.prisma.category.findUnique({
           where: { slug },
           include: {
-            autocomplete: true,
             image: true,
           },
         }),

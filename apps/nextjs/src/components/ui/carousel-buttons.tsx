@@ -1,5 +1,7 @@
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
+import { cn } from "~/utils/cn";
+
 export const DotButton = (props: {
   selected: boolean;
   onClick: () => void;
@@ -22,8 +24,9 @@ export const DotButton = (props: {
 export const PrevButton = (props: {
   enabled: boolean;
   onClick: () => void;
+  className?: string;
 }) => {
-  const { enabled, onClick } = props;
+  const { enabled, onClick, className } = props;
 
   return (
     <button
@@ -31,7 +34,12 @@ export const PrevButton = (props: {
       onClick={onClick}
       disabled={!enabled}
     >
-      <ChevronLeft className="text-brand-700 h-12 w-12 hover:animate-pulse" />
+      <ChevronLeft
+        className={cn(
+          "text-brand-700 h-12 w-12 hover:animate-pulse",
+          className,
+        )}
+      />
     </button>
   );
 };
@@ -39,8 +47,9 @@ export const PrevButton = (props: {
 export const NextButton = (props: {
   enabled: boolean;
   onClick: () => void;
+  className?: string;
 }) => {
-  const { enabled, onClick } = props;
+  const { enabled, onClick, className } = props;
 
   return (
     <button
@@ -48,7 +57,12 @@ export const NextButton = (props: {
       onClick={onClick}
       disabled={!enabled}
     >
-      <ChevronRight className="text-brand-700 h-12 w-12 hover:animate-pulse" />
+      <ChevronRight
+        className={cn(
+          "text-brand-700 h-12 w-12 hover:animate-pulse",
+          className,
+        )}
+      />
     </button>
   );
 };

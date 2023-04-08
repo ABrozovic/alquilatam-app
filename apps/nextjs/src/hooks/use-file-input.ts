@@ -1,6 +1,7 @@
 // Component 1: FileInput (handles the file input and validation)
 import { useState } from "react";
 import { z } from "zod";
+
 import { type CommonMimeType } from "~/utils/mime-types";
 
 type FileObject = {
@@ -16,7 +17,7 @@ type FileInputProps = {
   maxNumberOfFiles?: number;
   acceptedMimeTypes?: CommonMimeType[];
   maxFileSizePerFileInMB?: number;
-  defaultValue?: FileObject[];
+  defaultFiles?: FileObject[];
 };
 
 const useFileInput = ({
@@ -24,10 +25,10 @@ const useFileInput = ({
   maxNumberOfFiles = 1,
   onError,
   acceptedMimeTypes = [],
-  defaultValue = [],
+  defaultFiles = [],
 }: FileInputProps) => {
   const maxFileSizePerItem = maxFileSizePerFileInMB * MB_BYTES;
-  const [files, setFiles] = useState<FileObject[]>(defaultValue);
+  const [files, setFiles] = useState<FileObject[]>(defaultFiles);
   const schema = z
     .array(z.any())
     .max(maxNumberOfFiles, {
@@ -35,17 +36,16 @@ const useFileInput = ({
     })
     .superRefine((f, ctx) => {
       for (let i = 0; i < f.length; i++) {
-        const { id, file } = f[i] as FileObject;
-        if (!defaultValue.map(({ id }) => id).includes(id)) {
-          if (!acceptedMimeTypes.includes(file?.type as CommonMimeType)) {
-            ctx.addIssue({
-              code: z.ZodIssueCode.custom,
-              message: `File at index ${i} must be one of [${acceptedMimeTypes.join(
-                ", ",
-              )}] but was ${file?.type}`,
-            });
-          }
+        const { file } = f[i] as FileObject;
+        if (!acceptedMimeTypes.includes(file?.type as CommonMimeType)) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: `File at index ${i} must be one of [${acceptedMimeTypes.join(
+              ", ",
+            )}] but was ${file?.type}`,
+          });
         }
+
         if (file && file.size > maxFileSizePerItem) {
           ctx.addIssue({
             code: z.ZodIssueCode.too_big,
@@ -59,6 +59,7 @@ const useFileInput = ({
     });
 
   const handleDrop = (acceptedFiles: File[]) => {
+    onError("");
     const newFilesWithPreviews: FileObject[] = acceptedFiles
       .map((file) => {
         const id = `${file.name}-${file.lastModified}-${file.size}`;

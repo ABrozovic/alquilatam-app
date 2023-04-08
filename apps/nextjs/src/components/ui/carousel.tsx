@@ -81,15 +81,15 @@ const AutoCarousel: React.FC<AutoCarouselProps> = ({
         ))}
       </div>
       <div className="embla flex flex-1 items-center justify-center">
-        <PrevButton onClick={scrollPrev} enabled={prevBtnEnabled} />
+        <PrevButton
+          onClick={scrollPrev}
+          enabled={prevBtnEnabled}
+          className="absolute left-0 z-10 -translate-y-1/2"
+        />
 
         <div
           className="embla__viewport flex flex-1 overflow-hidden"
           ref={emblaRef}
-          style={{
-            minHeight: minHeight,
-            maxHeight: maxHeight,
-          }}
         >
           <div className="embla__container flex h-auto flex-1 flex-row">
             {slides.map((slide) => (
@@ -99,17 +99,16 @@ const AutoCarousel: React.FC<AutoCarouselProps> = ({
               >
                 <Link href={slide.link ? `${slide.link}` : "#"}>
                   <div
+                    className="relative w-full"
                     style={{
-                      position: "relative",
-                      width: "100%",
                       height: maxHeight,
                     }}
                   >
                     <Image
-                      className="block"
+                      className="object-contain"
+                      style={{ minWidth: "200px" }}
                       placeholder="blur"
                       blurDataURL={slide.blur}
-                      style={{ objectFit: "contain" }}
                       alt={slide.alt}
                       src={slide.src}
                       fill
@@ -123,7 +122,11 @@ const AutoCarousel: React.FC<AutoCarouselProps> = ({
             ))}
           </div>
         </div>
-        <NextButton onClick={scrollNext} enabled={nextBtnEnabled} />
+        <NextButton
+          onClick={scrollNext}
+          enabled={nextBtnEnabled}
+          className="absolute right-0 z-10 -translate-y-1/2"
+        />
       </div>
     </div>
   );
