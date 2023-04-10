@@ -1,3 +1,4 @@
+import { SignedIn } from "@clerk/nextjs";
 import {
   Clock,
   LogOut,
@@ -85,7 +86,9 @@ export function SiteHeader() {
     <header className="bg-brand-700 sticky top-0 z-40 w-full border-b border-b-slate-200 dark:border-b-slate-700 dark:bg-slate-900">
       <div className="container flex h-16 items-center justify-between space-x-4 sm:space-x-0">
         <MainNav items={siteConfig.mainNav} />
-        <HeaderAvatarMenu />
+        <SignedIn>
+          <HeaderAvatarMenu />
+        </SignedIn>
       </div>
     </header>
   );

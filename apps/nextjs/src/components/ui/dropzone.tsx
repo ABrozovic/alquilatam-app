@@ -43,6 +43,12 @@ const Dropzone: React.FC<DropzoneProps> = ({
       setError(err);
     },
   });
+  useEffect(() => {
+    return () => {
+      console.log("rab")
+      files.map((preview) => URL.revokeObjectURL(preview.preview));
+    };
+  }, [files]);
 
   const thumbnails = files.map((preview, index) => {
     return (
@@ -52,14 +58,13 @@ const Dropzone: React.FC<DropzoneProps> = ({
       >
         <Image
           fill
-          className="objet-cover"
+          className="object-cover"
           alt="Image preview"
           key={index}
           src={preview.preview}
           sizes="(max-width: 768px) 100vw,
                   (max-width: 1200px) 50vw,
                   33vw"
-          onLoad={() => URL.revokeObjectURL(preview.preview)}
         />
         <div
           className={`absolute top-0 left-0 flex h-52 w-52 items-center justify-center`}
@@ -67,6 +72,7 @@ const Dropzone: React.FC<DropzoneProps> = ({
           <div className="group flex flex-col">
             <div className="absolute top-0 right-0 h-52 w-52 bg-white opacity-0 transition-all duration-200 ease-in-out group-hover:opacity-90"></div>
             <button
+              type="button"
               className="z-10 rounded-lg bg-blue-500 py-2 px-4 text-white  opacity-0 transition-all duration-300 ease-in-out hover:bg-blue-700 group-hover:opacity-100"
               onClick={() => {
                 setModalImg(preview);
@@ -76,6 +82,7 @@ const Dropzone: React.FC<DropzoneProps> = ({
               Ver
             </button>
             <button
+              type="button"
               className="bg-brand-700 z-10 mt-2 rounded-lg py-2 px-4 text-white  opacity-0 transition-all duration-300 ease-in-out hover:bg-red-700 group-hover:opacity-100"
               onClick={() => handleRemove(index)}
             >

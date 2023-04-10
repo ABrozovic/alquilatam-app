@@ -69,6 +69,7 @@
     "react-dropzone": "^14.2.3",
     "react-hook-form": "^7.43.8",
     "react-virtuoso": "^4.1.0",
+    "sharp": "^0.32.0",
     "superjson": "1.9.1",
     "svix": "^0.81.0",
     "tailwind-merge": "^1.10.0",

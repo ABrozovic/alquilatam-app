@@ -142,7 +142,8 @@ export const protectedProcedure = t.procedure.use(enforceUserIsAuthed);
  * procedure
  */
 const enforceUserIsAdmin = t.middleware(({ ctx, next }) => {
-  if (ctx.auth.orgSlug !== "admin") {
+  //For org based auth ctx.auth.orgSlug !== "admin"
+  if (ctx.auth.userId !== "user_2OCgvEicLVSTuqMlyYhph2QgITH") {
     throw new TRPCError({ code: "UNAUTHORIZED", message: "Not authenticated" });
   }
   return next({

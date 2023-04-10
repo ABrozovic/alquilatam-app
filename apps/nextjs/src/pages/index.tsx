@@ -1,12 +1,18 @@
+import {
+  type GetServerSideProps,
+  type GetServerSidePropsContext,
+  type InferGetServerSidePropsType,
+} from "next";
 import Head from "next/head";
 import Link from "next/link";
+import { SignedOut } from "@clerk/nextjs";
+import { buildClerkProps, clerkClient, getAuth } from "@clerk/nextjs/server";
 
 import { AdBanner } from "~/components/banner";
 import { Layout } from "~/components/layout";
 import { buttonVariants } from "~/components/ui/button";
 import AutoCarousel from "~/components/ui/carousel";
 import { Input } from "~/components/ui/input";
-import { siteConfig } from "~/temp/site";
 
 export const images = [
   {
@@ -38,7 +44,9 @@ export const images = [
     id: "4",
   },
 ];
-export default function IndexPage() {
+export default function IndexPage({
+  user,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) {
   return (
     <>
       <Layout>
@@ -59,30 +67,33 @@ export default function IndexPage() {
         <section className="container flex min-h-full flex-1 pt-6 pb-6 ">
           <div className="flex flex-1 flex-col gap-6">
             <div className="flex flex-col gap-2 sm:gap-6">
-              <div className="flex w-full items-center justify-between gap-8">
-                <Link
-                  href={siteConfig.links.docs}
-                  target="_blank"
-                  rel="noreferrer"
-                  className={`${buttonVariants({
-                    variant: "outline",
-                    size: "lg",
-                  })} w-full`}
-                >
-                  REGISTRATE
-                </Link>
-                <Link
-                  target="_blank"
-                  rel="noreferrer"
-                  href={siteConfig.links.github}
-                  className={`${buttonVariants({
-                    variant: "outline",
-                    size: "lg",
-                  })} w-full`}
-                >
-                  INICIA SESION
-                </Link>
-              </div>
+              {user === null && (
+                <div className="flex w-full items-center justify-between gap-8">
+                  <Link
+                    href={"/sign-up"}
+                    target="_blank"
+                    rel="noreferrer"
+                    className={`${buttonVariants({
+                      variant: "outline",
+                      size: "lg",
+                    })} w-full`}
+                  >
+                    REGISTRATE
+                  </Link>
+                  <Link
+                    target="_blank"
+                    rel="noreferrer"
+                    href={"/sign-in"}
+                    className={`${buttonVariants({
+                      variant: "outline",
+                      size: "lg",
+                    })} w-full`}
+                  >
+                    INICIA SESION
+                  </Link>
+                </div>
+              )}
+
               <h1 className="text-brand-700 hidden text-center text-xl font-extrabold leading-tight tracking-tighter sm:block">
                 {`Alquila cualquier objeto que necesites con Alquilatam: `}
                 <br className="inline text-base sm:text-lg xl:hidden" />
@@ -110,3 +121,12 @@ export default function IndexPage() {
     </>
   );
 }
+export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
+  const { userId } = getAuth(ctx.req);
+
+  if (!userId) {
+    return { props: { user: null } };
+  }
+
+  return { props: { ...buildClerkProps(ctx.req) } };
+};
