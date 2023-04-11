@@ -22,7 +22,7 @@ export const commonMimeTypes = {
     extensions: [".atom"],
   },
   "application/java-archive": {
-    extensions: [".jar", "war", "ear"],
+    extensions: [".jar", ".war", ".ear"],
   },
   "application/javascript": {
     extensions: [".js"],
@@ -38,23 +38,23 @@ export const commonMimeTypes = {
   },
   "application/octet-stream": {
     extensions: [
-      "bin",
-      "exe",
-      "dll",
-      "deb",
-      "dmg",
-      "iso",
-      "img",
-      "msi",
-      "msp",
-      "msm",
+      ".bin",
+      ".exe",
+      ".dll",
+      ".deb",
+      ".dmg",
+      ".iso",
+      ".img",
+      ".msi",
+      ".msp",
+      ".msm",
     ],
   },
   "application/pdf": {
     extensions: [".pdf"],
   },
   "application/postscript": {
-    extensions: [".ps", "eps", "ai"],
+    extensions: [".ps", ".eps", ".ai"],
   },
   "application/rss+xml": {
     extensions: [".rss"],
@@ -123,10 +123,10 @@ export const commonMimeTypes = {
     extensions: [".run"],
   },
   "application/x-perl": {
-    extensions: [".pl", "pm"],
+    extensions: [".pl", ".pm"],
   },
   "application/x-pilot": {
-    extensions: [".prc", "pdb"],
+    extensions: [".prc", ".pdb"],
   },
   "application/x-rar-compressed": {
     extensions: [".rar"],
@@ -144,10 +144,10 @@ export const commonMimeTypes = {
     extensions: [".sit"],
   },
   "application/x-tcl": {
-    extensions: [".tcl", "tk"],
+    extensions: [".tcl", ".tk"],
   },
   "application/x-x509-ca-cert": {
-    extensions: [".der", "pem", "crt"],
+    extensions: [".der", ".pem", ".crt"],
   },
   "application/x-xpinstall": {
     extensions: [".xpi"],
@@ -162,7 +162,7 @@ export const commonMimeTypes = {
     extensions: [".zip"],
   },
   "audio/midi": {
-    extensions: [".mid", "midi", "kar"],
+    extensions: [".mid", ".midi", ".kar"],
   },
   "audio/mpeg": {
     extensions: [".mp3"],
@@ -189,16 +189,16 @@ export const commonMimeTypes = {
     extensions: [".gif"],
   },
   "image/jpeg": {
-    extensions: [".jpeg", "jpg"],
+    extensions: [".jpeg", ".jpg"],
   },
   "image/png": {
     extensions: [".png"],
   },
   "image/svg+xml": {
-    extensions: [".svg", "svgz"],
+    extensions: [".svg", ".svgz"],
   },
   "image/tiff": {
-    extensions: [".tif", "tiff"],
+    extensions: [".tif", ".tiff"],
   },
   "image/vnd.wap.wbmp": {
     extensions: [".wbmp"],
@@ -219,7 +219,7 @@ export const commonMimeTypes = {
     extensions: [".css"],
   },
   "text/html": {
-    extensions: [".html", "htm", "shtml"],
+    extensions: [".html", ".htm", ".shtml"],
   },
   "text/mathml": {
     extensions: [".mml"],
@@ -240,7 +240,7 @@ export const commonMimeTypes = {
     extensions: [".xml"],
   },
   "video/3gpp": {
-    extensions: [".3gpp", "3gp"],
+    extensions: [".3gpp", ".3gp"],
   },
   "video/mp2t": {
     extensions: [".ts"],
@@ -249,7 +249,7 @@ export const commonMimeTypes = {
     extensions: [".mp4"],
   },
   "video/mpeg": {
-    extensions: [".mpeg", "mpg"],
+    extensions: [".mpeg", ".mpg"],
   },
   "video/quicktime": {
     extensions: [".mov"],
@@ -267,7 +267,7 @@ export const commonMimeTypes = {
     extensions: [".mng"],
   },
   "video/x-ms-asf": {
-    extensions: [".asx", "asf"],
+    extensions: [".asx", ".asf"],
   },
   "video/x-ms-wmv": {
     extensions: [".wmv"],

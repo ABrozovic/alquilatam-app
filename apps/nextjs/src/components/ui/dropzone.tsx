@@ -25,7 +25,7 @@ const Dropzone: React.FC<DropzoneProps> = ({
   maxFileSizePerFileInMB = 3,
   maxNumberOfFiles = 3,
   onFilesChanged,
-  acceptedMimeTypes = ["image/png"],
+  acceptedMimeTypes = ["image/png", "image/jpeg"],
   defaultValue = [],
   multiple = true,
 }) => {
@@ -45,7 +45,6 @@ const Dropzone: React.FC<DropzoneProps> = ({
   });
   useEffect(() => {
     return () => {
-      console.log("rab")
       files.map((preview) => URL.revokeObjectURL(preview.preview));
     };
   }, [files]);

@@ -94,7 +94,7 @@ const AutoCarousel: React.FC<AutoCarouselProps> = ({
           <div className="embla__container flex h-auto flex-1 flex-row">
             {slides.map((slide) => (
               <div
-                className="embla__slide relative shrink-0 grow-0 basis-full px-4 md:basis-1/2 lg:basis-1/3"
+                className="embla__slide relative shrink-0 grow-0 basis-full overflow-hidden px-4 md:basis-1/2 lg:basis-1/3"
                 key={slide.id}
               >
                 <Link href={slide.link ? `${slide.link}` : "#"}>
