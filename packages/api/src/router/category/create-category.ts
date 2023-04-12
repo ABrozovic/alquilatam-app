@@ -1,5 +1,5 @@
 import { TRPCError } from "@trpc/server";
-import { z } from "zod";
+import { type z } from "zod";
 
 import { type PrismaClient } from "@acme/db";
 

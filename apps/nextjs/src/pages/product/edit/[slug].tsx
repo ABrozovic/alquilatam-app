@@ -1,18 +1,16 @@
-import { useEffect } from "react";
-import { useAuth } from "@clerk/nextjs";
-import { DevTool } from "@hookform/devtools";
-import { Controller } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Controller, useForm } from "react-hook-form";
 
 import {
-  createProductFormSchema,
-  type CreateProductForm,
-} from "@acme/api/src/router/product/create-product";
+  updateProductSchema,
+  type UpdateProduct,
+} from "@acme/api/src/router/product/update-product";
 
 import { api } from "~/utils/api";
+import { extractMediaType } from "~/utils/mime-types";
 import { useZodForm } from "~/components/form/use-zod-form";
 import Form from "~/components/form/zod-form";
 import { Layout } from "~/components/layout";
-import { Button } from "~/components/ui/button";
 import Dropzone from "~/components/ui/dropzone";
 import HookFormImput from "~/components/ui/hookFormInput";
 import HookFormTextArea from "~/components/ui/hookFormTextArea";
@@ -25,22 +23,18 @@ import {
   SelectValue,
 } from "~/components/ui/select";
 
-const CreateProduct = () => {
-  const { userId } = useAuth();
-  const { data: categories } = api.category.getAll.useQuery();
-  const form = useZodForm({
-    schema: createProductFormSchema,
-  });
-  useEffect(() => {
-    if (!userId) return;
-    form.reset({ userId });
-  }, [form, userId]);
+const EditProduct = () => {
+  const { data: product } = api.product.getById.useQuery(
+    { productId: "" },
+    { enabled: !!"productId" },
+  );
 
-  if (!categories) return null;
+  const form = useZodForm({ schema: updateProductSchema });
+  if (!product) return null;
   return (
     <Layout>
       <div className="container flex min-h-full flex-1 flex-col items-center pt-6 pb-6">
-        <Form<CreateProductForm>
+        <Form<UpdateProduct>
           form={form}
           logger
           onSubmit={() => console.log("a")}
@@ -54,7 +48,7 @@ const CreateProduct = () => {
                   Selecciona una categoria
                 </Label>
                 <Select
-                  onValueChange={(val) => onChange(val)}
+                  onValueChange={(val) => console.log(val)}
                   {...form.register("categoryId")}
                 >
                   <SelectTrigger className="border-brand-700 w-full">
@@ -68,15 +62,12 @@ const CreateProduct = () => {
                     />
                   </SelectTrigger>
                   <SelectContent>
-                    {categories.map((cat) => (
-                      <SelectItem
-                        className="text-brand-700 w-full"
-                        key={cat.id}
-                        value={cat.id}
-                      >
-                        {cat.name}
-                      </SelectItem>
-                    ))}
+                    <SelectItem value="test">1</SelectItem>
+                    <SelectItem value="tesat">2</SelectItem>
+                    <SelectItem value="tesaadt">3</SelectItem>
+                    <SelectItem value="tesaat">4</SelectItem>
+                    <SelectItem value="tedst">5</SelectItem>
+                    <SelectItem value="tfest">6</SelectItem>
                   </SelectContent>
                 </Select>
               </>
@@ -88,12 +79,6 @@ const CreateProduct = () => {
             placeholder="Ej: Cámara EOS 5D Mark IV"
             errors={form.formState.errors}
             register={form.register("name")}
-          />
-          <HookFormImput
-            label="Marca"
-            placeholder="Ej: Canon"
-            errors={form.formState.errors}
-            register={form.register("brand")}
           />
           <HookFormImput
             label="Tipo"
@@ -114,7 +99,7 @@ const CreateProduct = () => {
                 label="Precio"
                 placeholder="Ej: 100"
                 errors={form.formState.errors}
-                register={form.register("price", { valueAsNumber: true })}
+                register={form.register("price")}
               />
             </div>
             <Controller
@@ -123,7 +108,7 @@ const CreateProduct = () => {
               render={({ field: { onChange } }) => (
                 <div className="w-40">
                   <br />
-                  <Select onValueChange={(val) => onChange(val)}>
+                  <Select onValueChange={(val) => console.log(val)}>
                     <SelectTrigger className="border-brand-700 w-full">
                       <SelectValue
                         className="text-red-500"
@@ -133,24 +118,12 @@ const CreateProduct = () => {
                       />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem
-                        className="text-brand-700 w-full"
-                        value="hora"
-                      >
-                        Hora
-                      </SelectItem>
-                      <SelectItem className="text-brand-700 w-full" value="dia">
-                        Día
-                      </SelectItem>
-                      <SelectItem
-                        className="text-brand-700 w-full"
-                        value="semana"
-                      >
-                        Semana
-                      </SelectItem>
-                      <SelectItem className="text-brand-700 w-full" value="mes">
-                        Mes
-                      </SelectItem>
+                      <SelectItem value="test">1</SelectItem>
+                      <SelectItem value="tesat">2</SelectItem>
+                      <SelectItem value="tesaadt">3</SelectItem>
+                      <SelectItem value="tesaat">4</SelectItem>
+                      <SelectItem value="tedst">5</SelectItem>
+                      <SelectItem value="tfest">6</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -166,7 +139,7 @@ const CreateProduct = () => {
                 className="w-40"
                 placeholder="Ej: 1"
                 errors={form.formState.errors}
-                register={form.register("timeRange", { valueAsNumber: true })}
+                register={form.register("timeRange")}
               />
             </div>
             <Controller
@@ -174,7 +147,7 @@ const CreateProduct = () => {
               control={form.control}
               render={({ field: { onChange } }) => (
                 <div className="w-40">
-                  <Select onValueChange={(val) => onChange(val)}>
+                  <Select onValueChange={(val) => console.log(val)}>
                     <SelectTrigger className="border-brand-700 w-full">
                       <SelectValue
                         className="text-red-500"
@@ -184,24 +157,12 @@ const CreateProduct = () => {
                       />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem
-                        className="text-brand-700 w-full"
-                        value="hora"
-                      >
-                        Hora(s)
-                      </SelectItem>
-                      <SelectItem className="text-brand-700 w-full" value="dia">
-                        Día(s)
-                      </SelectItem>
-                      <SelectItem
-                        className="text-brand-700 w-full"
-                        value="semana"
-                      >
-                        Semana(s)
-                      </SelectItem>
-                      <SelectItem className="text-brand-700 w-full" value="mes">
-                        Mes(es)
-                      </SelectItem>
+                      <SelectItem value="test">1</SelectItem>
+                      <SelectItem value="tesat">2</SelectItem>
+                      <SelectItem value="tesaadt">3</SelectItem>
+                      <SelectItem value="tesaat">4</SelectItem>
+                      <SelectItem value="tedst">5</SelectItem>
+                      <SelectItem value="tfest">6</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -217,23 +178,43 @@ const CreateProduct = () => {
           <Controller
             control={form.control}
             name="images"
-            render={({ field: { onChange }, fieldState: { error } }) => (
-              <>
-                <Dropzone
-                  onFilesChanged={(files) =>
-                    onChange(files.map((file) => file.file))
-                  }
-                  onError={(error) => console.log(error)}
-                />
-                {error && <div className="text-red-500">{error.message}</div>}
-              </>
+            render={({
+              field: { onChange },
+              fieldState: { invalid, isTouched, isDirty, error },
+              formState,
+            }) => (
+              <Dropzone
+                onFilesChanged={(files) => onChange(files)}
+                defaultValue={product.images.map((image) => ({
+                  id: image.id,
+                  preview: image.image,
+                  file: { type: extractMediaType(image.blur) } as File,
+                }))}
+                onError={(error) => console.log(error)}
+              />
             )}
           />
-          <Button type="submit">Create</Button>
         </Form>
       </div>
     </Layout>
   );
 };
 
-export default CreateProduct;
+export default EditProduct;
+
+// export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
+//   const query = ctx.query;
+//   const ssg = getSSGProxy(ctx);
+//   const data = slugSchema.safeParse(query);
+//   if (!data.success) {
+//     return { props: {} };
+//   }
+//   const slug = data.data.slug;
+//   await ssg.product.getByCategory.prefetch({ categorySlug: slug });
+//   return {
+//     props: {
+//       trpcState: ssg.dehydrate(),
+//       categorySlug: slug,
+//     },
+//   };
+// };

@@ -1,7 +1,22 @@
+import { z } from "zod";
+
+const mediaDataUrlSchema = z.string().refine(
+  (dataUrl) => {
+    return /^data:(.+);base64/.test(dataUrl);
+  },
+  {
+    message: "Invalid image data URL",
+  },
+);
+
+export function extractMediaType(data: string | null): string {
+  const regexResult = mediaDataUrlSchema.parse(data);
+  return regexResult[1] ?? "";
+}
 export type CommonMimeType = keyof typeof commonMimeTypes;
 export const fetchType = (url: string): string | undefined => {
   const match = /\.([a-z0-9]+)$/i.exec(url);
-  const extension = match ? `.${match[1]}` : undefined;
+  const extension = match ? `.${match[1]}` : "";
   if (extension) {
     return fetchTypeByExtension(extension);
   }
