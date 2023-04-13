@@ -32,7 +32,6 @@ const CreateCategory = () => {
 
   const form = useZodForm({ schema: createCategoryForm });
   const onSubmit = async (values: CreateCategoryForm) => {
-    console.log("hit here");
     const newImage = values.image
       ? await handleCloudinaryUpload([values.image], "category")
       : [];

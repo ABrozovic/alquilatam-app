@@ -1,6 +1,5 @@
 import { useEffect } from "react";
 import { useAuth } from "@clerk/nextjs";
-import { DevTool } from "@hookform/devtools";
 import { Controller } from "react-hook-form";
 
 import {
@@ -9,6 +8,7 @@ import {
 } from "@acme/api/src/router/product/create-product";
 
 import { api } from "~/utils/api";
+import { handleCloudinaryUpload } from "~/utils/handle-upload";
 import { useZodForm } from "~/components/form/use-zod-form";
 import Form from "~/components/form/zod-form";
 import { Layout } from "~/components/layout";
@@ -28,6 +28,7 @@ import {
 const CreateProduct = () => {
   const { userId } = useAuth();
   const { data: categories } = api.category.getAll.useQuery();
+  const { mutate: createProduct } = api.product.create.useMutation();
   const form = useZodForm({
     schema: createProductFormSchema,
   });
@@ -36,15 +37,28 @@ const CreateProduct = () => {
     form.reset({ userId });
   }, [form, userId]);
 
+  const onSubmit = async (values: CreateProductForm) => {
+    const newImages = values.images
+      ? await handleCloudinaryUpload([...values.images], "product")
+      : [];
+
+    if (!newImages) throw new Error("Image Upload failed");
+    createProduct({
+      ...values,
+      images: newImages.map((image) => ({
+        image: image.url,
+        publicId: image.public_id,
+        size: parseInt(image.bytes),
+        blur: image.base64,
+      })),
+    });
+  };
+
   if (!categories) return null;
   return (
     <Layout>
       <div className="container flex min-h-full flex-1 flex-col items-center pt-6 pb-6">
-        <Form<CreateProductForm>
-          form={form}
-          logger
-          onSubmit={() => console.log("a")}
-        >
+        <Form<CreateProductForm> form={form} logger onSubmit={onSubmit}>
           <Controller
             name="categoryId"
             control={form.control}

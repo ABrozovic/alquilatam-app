@@ -4,9 +4,13 @@ import { type PrismaClient } from "@acme/db";
 
 import { trpcWithErrorHandling } from "../../util/error-handler";
 import { fileSchema } from "../category/schema";
-import { productSchema } from "./schema";
+import { productImageSchema, productSchema } from "./schema";
 
-export const createProductSchema = productSchema.omit({ id: true });
+export const createProductSchema = productSchema
+  .omit({ id: true, images: true })
+  .extend({
+    images: productImageSchema.omit({ id: true, productId: true }).array(),
+  });
 export type CreateProduct = z.infer<typeof createProductSchema>;
 
 export const createProductFormSchema = createProductSchema
@@ -26,6 +30,10 @@ export const createProduct = ({
   data: CreateProduct;
 }) => {
   const { categoryId, userId, images, ...rest } = data;
+  console.log("🚀 ~ file: create-product.ts:29 ~ rest:", rest);
+  console.log("🚀 ~ file: create-product.ts:29 ~ images:", images);
+  console.log("🚀 ~ file: create-product.ts:29 ~ userId:", userId);
+  console.log("🚀 ~ file: create-product.ts:29 ~ categoryId:", categoryId);
   return trpcWithErrorHandling(
     prisma.product.create({
       data: {
@@ -36,7 +44,7 @@ export const createProduct = ({
         },
         user: {
           connect: {
-            id: userId,
+            userId,
           },
         },
         ...(images && {

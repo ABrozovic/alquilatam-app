@@ -22,6 +22,7 @@ import { getSSGProxy } from "~/lib/ssg-helper";
 const Category = ({
   categorySlug,
 }: Required<InferGetServerSidePropsType<typeof getServerSideProps>>) => {
+  console.log("🚀 ~ file: [slug].tsx:25 ~ categorySlug:", categorySlug);
   const { data } = api.product.getByCategory.useQuery({ categorySlug });
 
   const fuseOptions = {
@@ -29,12 +30,7 @@ const Category = ({
     includeMatches: true,
     threshold: 0.1,
   };
-  const { hits, onSearch } = useFuse(
-    data?.products,
-    true,
-    { limit: -1 },
-    fuseOptions,
-  );
+  const { hits, onSearch } = useFuse(data, true, { limit: -1 }, fuseOptions);
 
   const scrollAreaRef = useRef<HTMLDivElement | null>(null);
 
@@ -71,7 +67,7 @@ const Category = ({
                     images,
                   } = {
                     ...hits[index]?.item,
-                  } as ProductByCategory;
+                  } as NonNullable<ProductByCategory>[number];
 
                   const image = (images && { ...images[0] }.image) || "";
                   const blur = (images && { ...images[0] }.blur) || "";

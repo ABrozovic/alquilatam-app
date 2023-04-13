@@ -1,5 +1,8 @@
 import React, { useEffect, useRef } from "react";
-import { type GetServerSidePropsContext } from "next";
+import {
+  type GetServerSidePropsContext,
+  type InferGetServerSidePropsType,
+} from "next";
 import Image from "next/image";
 import {
   Book,
@@ -18,33 +21,31 @@ import { api } from "~/utils/api";
 import { parseTimeRange } from "~/utils/parse-time";
 import { AdBanner } from "~/components/banner";
 import { Layout } from "~/components/layout";
+import AlertModal from "~/components/modals/alert-modal";
 import RegistrationReminder from "~/components/registration-modal";
 import { Button } from "~/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "~/components/ui/dialog";
-import { ScrollArea } from "~/components/ui/scroll-area";
-import { productMeh } from "./meh";
+import { Dialog, DialogContent } from "~/components/ui/dialog";
+import { getSSGProxy } from "~/lib/ssg-helper";
 
-const ProductPage = () => {
-  // const { data: product } = api.product.getById.useQuery(
-  //   { productId: "" },
-  //   { enabled: !!"productId" },
-  // );
-  const product = productMeh;
+const ProductPage = ({
+  productId,
+}: Required<InferGetServerSidePropsType<typeof getServerSideProps>>) => {
+  const { data: product } = api.product.getById.useQuery(
+    { productId },
+    { enabled: !!"productId" },
+  );
+
   const [openImageModal, setOpenImageModal] = React.useState(false);
   const [open, setOpen] = React.useState(false);
   const [currentImage, setCurrentImage] = React.useState(0);
+  if (!product) return null;
   const handleSetImage = (index: number) => {
     if (index >= 0 && index < product.images.length) {
       setCurrentImage(index);
       if (!openImageModal) setOpenImageModal(true);
     }
   };
-  if (!product) return null;
+
   return (
     <>
       <Dialog open={openImageModal} onOpenChange={setOpenImageModal}>
@@ -83,9 +84,9 @@ const ProductPage = () => {
       <Layout>
         <section className="container relative flex min-h-full flex-1 flex-col pt-6 pb-6 ">
           <AdBanner />
-          <div className="flex flex-1 items-center justify-center p-6">
-            <div className="relative flex h-full w-full md:w-[50%]  ">
-              <div className="relative mx-auto w-full overflow-hidden rounded-3xl">
+          <div className="flex flex-1 items-center justify-center p-6 ">
+            <div className="flex h-96 w-auto md:w-[50%]  ">
+              <div className="relative w-full overflow-hidden rounded-3xl">
                 <Image
                   onClick={() => handleSetImage(0)}
                   src={product.images[0]?.image || ""}
@@ -197,7 +198,12 @@ const ProductPage = () => {
             </div>
           </div>
           <div className="flex items-center justify-center">
-            <Button className="mt-4 w-96 rounded-3xl">ALQUILAR</Button>
+            <Button
+              className="mt-4 w-96 rounded-3xl"
+              onClick={() => setOpen(true)}
+            >
+              ALQUILAR
+            </Button>
           </div>
         </section>
       </Layout>
@@ -207,19 +213,19 @@ const ProductPage = () => {
 
 export default ProductPage;
 
-// export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
-//   const query = ctx.query;
-//   const ssg = getSSGProxy(ctx);
-//   const data = slugSchema.safeParse(query);
-//   if (!data.success) {
-//     return { props: {} };
-//   }
-//   const slug = data.data.slug;
-//   await ssg.product.getByCategory.prefetch({ categorySlug: slug });
-//   return {
-//     props: {
-//       trpcState: ssg.dehydrate(),
-//       categorySlug: slug,
-//     },
-//   };
-// };
+export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
+  const query = ctx.query;
+  const ssg = getSSGProxy(ctx);
+  const data = slugSchema.safeParse(query);
+  if (!data.success) {
+    return { props: {} };
+  }
+  const productId = data.data.slug;
+  await ssg.product.getById.prefetch({ productId });
+  return {
+    props: {
+      trpcState: ssg.dehydrate(),
+      productId: productId,
+    },
+  };
+};

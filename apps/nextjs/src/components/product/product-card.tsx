@@ -26,13 +26,13 @@ const ProductCard = forwardRef<HTMLInputElement, ProductCardProps>(
       <TooltipProvider>
         <Link href={link ? link : `/product/${id}`}>
           <div
-            className=" relative h-64 w-full cursor-pointer overflow-hidden rounded-lg border border-gray-200  py-8  shadow-sm transition-colors duration-300 ease-in-out hover:bg-gray-100"
+            className=" relative h-64 w-full cursor-pointer overflow-hidden rounded-lg border border-gray-200 p-6  py-8  shadow-sm transition-colors duration-300 ease-in-out hover:bg-gray-100"
             onMouseEnter={() => setShowLogo(true)}
             onMouseLeave={() => setShowLogo(false)}
             ref={ref}
           >
             <div className="flex h-52 w-full items-center justify-between gap-4">
-              <div className="relative h-52 w-52">
+              <div className="relative h-52 w-52 ">
                 <Image
                   placeholder="blur"
                   blurDataURL={blur}

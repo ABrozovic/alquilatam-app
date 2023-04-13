@@ -13,12 +13,9 @@ export const getProductByCategorySchema = z.object({
 });
 export type GetProductByCategory = z.infer<typeof getProductByCategorySchema>;
 
-type ExtractProducts<T> = T extends { products: Product[] }
-  ? Pick<T, "products">
-  : never;
-export type ProductByCategory = ExtractProducts<
-  Exclude<RouterOutputs["product"]["getByCategory"], undefined>
->["products"][number];
+export type ProductByCategory = RouterOutputs["product"]["getByCategory"];
+
+type Test<T extends ProductByCategory> = T extends undefined ? never : T;
 
 export const getProductByCategory = async ({
   prisma,
@@ -27,12 +24,9 @@ export const getProductByCategory = async ({
   prisma: PrismaClient;
   data: GetProductByCategory;
 }) => {
-  const limit = data.pageSize ?? 5;
-  const { categorySlug, cursor } = data;
+  const { categorySlug } = data;
   try {
-    const products = await prisma.product.findMany({
-      take: limit + 1,
-      cursor: cursor ? { id: cursor } : undefined,
+    return await prisma.product.findMany({
       where: {
         category: {
           slug: categorySlug,
@@ -50,15 +44,6 @@ export const getProductByCategory = async ({
         },
       ],
     });
-    let nextCursor: typeof cursor | undefined = undefined;
-    if (products.length > limit) {
-      const nextProduct = products.pop();
-      nextCursor = nextProduct && nextProduct.id;
-    }
-    return {
-      products: products,
-      nextCursor,
-    };
   } catch (e) {
     if (isTRPCClientError(e)) {
       throw new TRPCError({

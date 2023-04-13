@@ -19,7 +19,7 @@ export const images = [
     src: "http://res.cloudinary.com/dnbfenk2q/image/upload/v1678503735/alquilatam/category/y6wugcxbj95aq6hdmo5z.png",
     alt: "tecnologia",
     blur: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAMAAAAFCAIAAAAPE8H1AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAPUlEQVR4nAEyAM3/ABlGYoFpTmxPLwBMQjMLAABJNB0AyKqIlntdd2VQAOnYwMitl//97ADZ0cmtoZ2BcmO4NRYHRWVwPAAAAABJRU5ErkJggg==",
-    link: "/category/electronicos-y-teconologia",
+    link: "/category/electronicos-y-tecnologia",
     id: "1",
   },
   {
