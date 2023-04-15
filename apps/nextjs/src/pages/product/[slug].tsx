@@ -4,6 +4,7 @@ import {
   type InferGetServerSidePropsType,
 } from "next";
 import Image from "next/image";
+import { useAuth } from "@clerk/nextjs";
 import {
   Book,
   ChevronLeft,
@@ -22,6 +23,7 @@ import { parseTimeRange } from "~/utils/parse-time";
 import { AdBanner } from "~/components/banner";
 import { Layout } from "~/components/layout";
 import AlertModal from "~/components/modals/alert-modal";
+import ProductContactModal from "~/components/product-contact-modal";
 import RegistrationReminder from "~/components/registration-modal";
 import { Button } from "~/components/ui/button";
 import { Dialog, DialogContent } from "~/components/ui/dialog";
@@ -30,6 +32,7 @@ import { getSSGProxy } from "~/lib/ssg-helper";
 const ProductPage = ({
   productId,
 }: Required<InferGetServerSidePropsType<typeof getServerSideProps>>) => {
+  const { userId } = useAuth();
   const { data: product } = api.product.getById.useQuery(
     { productId },
     { enabled: !!"productId" },
@@ -37,6 +40,7 @@ const ProductPage = ({
 
   const [openImageModal, setOpenImageModal] = React.useState(false);
   const [open, setOpen] = React.useState(false);
+  const [contact, setContact] = React.useState(false);
   const [currentImage, setCurrentImage] = React.useState(0);
   if (!product) return null;
   const handleSetImage = (index: number) => {
@@ -82,6 +86,11 @@ const ProductPage = ({
       </Dialog>
       <RegistrationReminder open={open} setOpen={setOpen} />
       <Layout>
+        <ProductContactModal
+          open={contact}
+          setOpen={setContact}
+          description={`Puedes contactarte con ${product.user?.name} en: \n  ${product.user?.phone1} \n ${product.user?.phone2} `}
+        />
         <section className="container relative flex min-h-full flex-1 flex-col pt-6 pb-6 ">
           <AdBanner />
           <div className="flex flex-1 items-center justify-center p-6 ">
@@ -200,7 +209,7 @@ const ProductPage = ({
           <div className="flex items-center justify-center">
             <Button
               className="mt-4 w-96 rounded-3xl"
-              onClick={() => setOpen(true)}
+              onClick={() => (!userId ? setOpen(true) : setContact(true))}
             >
               ALQUILAR
             </Button>
